@@ -4,7 +4,18 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-
+/**
+ * A caching wrapper around {@link DcMotorEx} that skips useless hardware writes.
+ * Set power/velocity/mode every loop as normal writes are only sent to the motor
+ * when the value changes beyond a preset tolerance.
+ *
+ * <pre>{@code
+ * LazyMotor shooter = new LazyMotor(hardwareMap, "shooterMotor");
+ * shooter.setVelocityRPM(3000);
+ * if (shooter.isStalled(4.0, 500)) shooter.stop();
+ * }</pre>
+ *
+ */
 public class LazyMotor implements DcMotorEx {
 
     private final DcMotorEx motor;
@@ -41,6 +52,9 @@ public class LazyMotor implements DcMotorEx {
         this.lastCurrentReadTimestamp = 0;
         this.cachedCurrentMA = 0.0;
         this.targetVelocity = 0.0;
+
+        // Stop motor on creation
+        stop();
     }
     // HardwareMap and motor name constructor
     public LazyMotor(HardwareMap hardwareMap, String name) {
@@ -225,7 +239,7 @@ public class LazyMotor implements DcMotorEx {
     }
 
     /**
-     * Refreshes cache and kills motor power.
+     * Refreshes cache.
      */
     public void refreshCache() {
         this.mode = motor.getMode();
@@ -234,7 +248,6 @@ public class LazyMotor implements DcMotorEx {
         this.power = motor.getPower();
         this.targetPosition = motor.getTargetPosition();
         this.targetVelocity = 0.0;
-        stop();
     }
 
     // --- Cached getters ---
@@ -300,7 +313,13 @@ public class LazyMotor implements DcMotorEx {
     public double getCurrent(CurrentUnit unit) {
         long now = System.currentTimeMillis();
         if (now - lastCurrentReadTimestamp > currentCacheIntervalMS) {
-            cachedCurrentMA = motor.getCurrent(CurrentUnit.MILLIAMPS);
+            double rawCurrentMA = motor.getCurrent(CurrentUnit.MILLIAMPS);
+
+            if (lastCurrentReadTimestamp == 0) {
+                cachedCurrentMA = rawCurrentMA;
+            } else {
+                cachedCurrentMA = ALPHA * rawCurrentMA + (1.0 - ALPHA) * cachedCurrentMA;
+            }
             lastCurrentReadTimestamp = now;
         }
         return unit == CurrentUnit.AMPS ? cachedCurrentMA / 1000.0 : cachedCurrentMA;
@@ -326,9 +345,8 @@ public class LazyMotor implements DcMotorEx {
      * @return True if the motor is currently stalled.
      */
     public boolean isStalled(double currentThresholdAmps, long requiredDurationMS) {
-        filteredCurrentAmps = ALPHA * getCurrent(CurrentUnit.AMPS) + (1 - ALPHA) * filteredCurrentAmps;
-
-        if (filteredCurrentAmps >= currentThresholdAmps) {
+        double currentAmps = getCurrent(CurrentUnit.AMPS);
+        if (currentAmps >= currentThresholdAmps) {
             if (stallStartTime == 0) {
                 stallStartTime = System.currentTimeMillis();
             }
