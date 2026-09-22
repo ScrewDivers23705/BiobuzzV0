@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.utils.math.LowPassFilter;
+
 /**
  * A caching wrapper around {@link DcMotorEx} that skips useless hardware writes.
  * Set power/velocity/mode every loop as normal writes are only sent to the motor
@@ -38,9 +40,8 @@ public class LazyMotor implements DcMotorEx {
     private int currentCacheIntervalMS = 50;
 
     // Values for stall detection
+    private final LowPassFilter currentFilter = new LowPassFilter(0.3);
     private long stallStartTime = 0;
-    private double filteredCurrentAmps = 0;
-    private static final double ALPHA = 0.3;
 
     // DcMotorEx constructor
     public LazyMotor(DcMotorEx motor) {
@@ -316,10 +317,9 @@ public class LazyMotor implements DcMotorEx {
             double rawCurrentMA = motor.getCurrent(CurrentUnit.MILLIAMPS);
 
             if (lastCurrentReadTimestamp == 0) {
-                cachedCurrentMA = rawCurrentMA;
-            } else {
-                cachedCurrentMA = ALPHA * rawCurrentMA + (1.0 - ALPHA) * cachedCurrentMA;
+                currentFilter.reset();
             }
+            cachedCurrentMA = currentFilter.update(rawCurrentMA);
             lastCurrentReadTimestamp = now;
         }
         return unit == CurrentUnit.AMPS ? cachedCurrentMA / 1000.0 : cachedCurrentMA;
@@ -356,5 +356,8 @@ public class LazyMotor implements DcMotorEx {
             return false;
         }
     }
-
+    public void resetCurrentFilter() {
+        currentFilter.reset();
+        lastCurrentReadTimestamp = 0;
+    }
 }
