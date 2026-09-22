@@ -23,7 +23,7 @@ public class Robot {
     public static Pose endPose = Pose.zero(); // make endPose public so it can be accessed in opmodes and drive initialization
     public Alliance alliance; // make alliance public so it can be accessed in opmodes
     private final Timer loop = new Timer();  // make timer object for looptime calculation
-    public double loops = 0, lastLoop = 0, loopTime = 0; // make loopTime values for calculation
+    public double loops = 0, lastLoop = 0, loopTime = 1; // make loopTime values for calculation
 
     public Robot(HardwareMap hardwareMap, Alliance alliance) {
         this.alliance = alliance; // set alliance to the alliance passed in from the opmode
@@ -43,6 +43,11 @@ public class Robot {
     public void update(){
         for (LynxModule hub : lynxHubs) hub.clearBulkCache(); // clear the bulk cache for all lynx hubs to improve looptimes
 
+        follower.update(); // update the follower object to update the robot's pose
+        //intake.update(); // update the intake object to update the intake's state
+        //shooter.update(); // update the shooter object to update the shooter's state
+
+
         loops++; // increment loops for looptime calculation
 
         if (loops >= 15) { // only calculate looptime after 15 loops to avoid initial startup lag
@@ -53,7 +58,7 @@ public class Robot {
         }
     }
 
-    public double getLoopTime(){
+    public double getFrequency(){
         return 1000/ loopTime; // return the average looptime in hertz
     }
 
