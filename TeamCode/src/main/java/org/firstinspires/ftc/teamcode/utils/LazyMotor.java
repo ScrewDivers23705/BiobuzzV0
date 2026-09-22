@@ -335,7 +335,7 @@ public class LazyMotor implements DcMotorEx {
     @Override public int getPortNumber() { return motor.getPortNumber(); }
 
     // --- Power Float Methods ---
-    @Override public void setPowerFloat() { motor.setPowerFloat(); }
+    @Override public void setPowerFloat() { motor.setPowerFloat(); this.power = 0; }
     @Override public boolean getPowerFloat() { return motor.getPowerFloat(); }
 
     /**

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 /**
  * A simple median filter implementation for smoothing noisy sensor data.
- * The filter remembers the N lastest measurements and returns the median value.
+ * The filter remembers the N latest measurements and returns the median value.
  */
 public class MedianFilter {
     private final double[] window;
@@ -39,21 +39,23 @@ public class MedianFilter {
 
         // Calculate median
         if (count % 2 == 1) {
-            return buffer[count / 2];
+            lastMedian = buffer[count / 2];
         } else {
-            return (buffer[(count / 2) - 1] + buffer[count / 2]) / 2.0;
+            lastMedian = (buffer[(count / 2) - 1] + buffer[count / 2]) / 2.0;
         }
+        return lastMedian;
     }
 
     /**
      * Gets the most recently calculated median value without pushing a new measurement.
      */
-    public double getMedian(){
+    public double getMedian() {
         return lastMedian;
     }
 
     public void reset() {
         index = 0;
+        lastMedian = 0.0;
         filled = false;
     }
 }
