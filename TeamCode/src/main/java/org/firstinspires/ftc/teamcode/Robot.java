@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Robot {
     private List<LynxModule> lynxHubs; // set to manual caching mode to improve looptimes
-    private Follower follower; // make follower public so it can be accessed in opmodes
+    public Follower follower; // make follower public so it can be accessed in opmodes
     public Intake intake; // make intake public so it can be accessed in opmodes
     public Shooter shooter; // make shooter public so it can be accessed in opmodes
     public static Pose endPose = Pose.zero(); // make endPose public so it can be accessed in opmodes and drive initialization
@@ -47,6 +47,9 @@ public class Robot {
         //intake.update(); // update the intake object to update the intake's state
         //shooter.update(); // update the shooter object to update the shooter's state
 
+        if (lastLoop == 0) {
+            lastLoop = loop.milliseconds();
+        }
 
         loops++; // increment loops for looptime calculation
 
