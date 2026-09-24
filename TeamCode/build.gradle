@@ -28,6 +28,8 @@ dependencies {
     implementation project(':FtcRobotController')
     implementation 'org.psilynx.psikit:core:0.2.0'
     implementation 'org.psilynx.psikit:ftc:0.2.0'
+    implementation("com.bylazar.sloth:fullpanels:0.3.2+1.0.13")
+
 }
 
 repositories {

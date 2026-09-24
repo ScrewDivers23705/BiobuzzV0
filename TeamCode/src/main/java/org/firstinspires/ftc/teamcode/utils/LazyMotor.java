@@ -31,7 +31,7 @@ public class LazyMotor implements DcMotorEx {
     private Direction direction;
 
     // Default thresholds for determining if a write is necessary
-    private double powerTolerance = 0.001;
+    private double powerTolerance = 0.005;
     private double velocityTolerance = 0.1;
 
     // Cached variables for current reads
@@ -192,6 +192,7 @@ public class LazyMotor implements DcMotorEx {
      */
     public void stop() {
         this.targetVelocity = 0.0;
+        this.power = 0.0;
         setPower(0.0, true);
     }
 
