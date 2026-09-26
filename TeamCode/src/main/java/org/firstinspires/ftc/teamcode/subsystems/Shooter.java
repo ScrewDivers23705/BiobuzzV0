@@ -1,11 +1,16 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.behaviors.InterruptedBehavior;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.LazyMotor;
 import org.firstinspires.ftc.teamcode.utils.LazyServo;
 import org.firstinspires.ftc.teamcode.utils.math.LookUpTable;
+
+import static com.pedropathing.ivy.commands.Commands.infinite;
 
 @Configurable
 public class Shooter {
@@ -22,6 +27,7 @@ public class Shooter {
     private double targetRPM = 0;
     private double currentRPM = 0;
     private double targetHoodPosition = 0;
+    private double distance = 0; // distance to the target, used to look up the target RPM and hood position
 
     private double currentVoltage = 12; // current battery voltage, used for feedforward control
 
@@ -36,23 +42,26 @@ public class Shooter {
         setupLookUpTable(); // setup the lookup table for distance to RPM and hood position
     }
 
-    public void periodic(double distance) {
-        // Update the target RPM and hood position based on the distance using the lookup table
-        if (lookUpTable != null) {
+    public Command periodic() {
+        return infinite(() -> {
+            // Update the target RPM and hood position based on the distance using the lookup table
             double[] outputs = lookUpTable.get(distance);
             targetRPM = outputs[0];
             targetHoodPosition = outputs[1];
-        }
 
-        currentRPM = flywheel.getVelocityRPM();
+            currentRPM = flywheel.getVelocityRPM();
 
-        if (active && targetRPM > 0) {
-            flywheel.setPowerCompensated(calculateFlywheelPower(), currentVoltage, 12.0); // TODO change the nominal voltage to whatever it was tuned at.
-            hood.setPosition(targetHoodPosition);
-        }
-        else {
-            flywheel.setPower(0.0);
-        }
+            if (active && targetRPM > 0) {
+                flywheel.setPowerCompensated(calculateFlywheelPower(), currentVoltage, 12.0); // TODO change the nominal voltage to whatever it was tuned at.
+                hood.setPosition(targetHoodPosition);
+            }
+            else {
+                flywheel.setPower(0.0);
+            }
+        })
+        .requiring(flywheel)
+        .setInterruptedBehavior(InterruptedBehavior.SUSPEND);
+
     }
     public double calculateFlywheelPower() {
         // Calculate the power needed to reach the target RPM using a simple feedforward control
@@ -65,7 +74,7 @@ public class Shooter {
         return active && (currentRPM > 0) && (Math.abs(targetRPM - currentRPM) <= tolerance);
     }
 
-    public void setupLookUpTable() {
+    private void setupLookUpTable() {
         this.lookUpTable = new LookUpTable(2); // 2 outputs: RPM and hood position
         // Add entries to the lookup table (distance in cm, RPM, hood position)
         //lookUpTable.add(100, 3000, 0.2); // 100cm: 3000 RPM, hood position 0.2 for exmaple
@@ -82,6 +91,8 @@ public class Shooter {
     public double getCurrentHoodPosition() { return hood.getPosition(); }
     public void setTargetHoodPosition(double targetHoodPosition) { this.targetHoodPosition = targetHoodPosition; }
     public double getCurrentVoltage() { return currentVoltage; }
+    public void setDistance(double distance) { this.distance = distance; }
+    public double getDistance() { return distance; }
     public void setCurrentVoltage(double currentVoltage) { this.currentVoltage = currentVoltage; }
-
+    public double getCurrent () { return flywheel.getCurrent(CurrentUnit.AMPS); }
 }

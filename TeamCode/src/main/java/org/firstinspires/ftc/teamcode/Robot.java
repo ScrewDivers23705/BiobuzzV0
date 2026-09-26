@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import static org.firstinspires.ftc.teamcode.pedro.Constants.create;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.math.Pose;
 import com.pedropathing.utils.Timer;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -12,6 +13,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.utils.Alliance;
+import org.psilynx.psikit.core.Logger;
 
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class Robot {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
 
-        follower = create(hardwareMap); // create the follower object using the create method from the Constants class
+        follower = create(hardwareMap).withLogger(log -> Logger.recordOutput("Follower/Logger", log.toString())); // create the follower object using the create method from the Constants class
         intake = new Intake(hardwareMap); // create the intake object using the hardwareMap passed in from the opmode
         shooter = new Shooter(hardwareMap); // create the shooter object using the hardwareMap passed in from the opmode
 
@@ -49,17 +51,16 @@ public class Robot {
 
     public void periodic(){
         for (LynxModule hub : lynxHubs) hub.clearBulkCache(); // clear the bulk cache for all lynx hubs to improve looptimes
+        loops++; // increment loops for looptime calculation
 
         follower.update(); // update the follower object to update the robot's pose
-        shooter.periodic(0); //TODO get distance by vision/follower // update the shooter object to update the shooter's state
 
         if (lastLoop == 0) {
             lastLoop = loop.milliseconds();
         }
 
-        loops++; // increment loops for looptime calculation
 
-        if (loops >= 15) { // only calculate looptime after 15 loops to avoid initial startup lag
+        if (loops >= 25) { // only calculate looptime after 25 loops to avoid initial startup lag
             double curTime = loop.milliseconds(); // get the current time in milliseconds
             loopTime = (curTime - lastLoop) / loops; // calculate the average looptime in milliseconds
             lastLoop = curTime; // set lastLoop to the current time for the next calculation
@@ -70,6 +71,14 @@ public class Robot {
         }
     }
 
+    public void start(){
+        intake.setAlliance(alliance);
+        Scheduler.schedule(
+            shooter.periodic(),// update the shooter object to update the shooter's state
+            intake.periodic() // update the intake object to update the intake's state
+        );
+    }
+
     public double getFrequency(){
         return 1000/ loopTime; // return the average looptime in hertz
     }
@@ -77,4 +86,5 @@ public class Robot {
     public void savePose(Pose pose){
         endPose = pose; // save the current pose to the static endPose so it can be used for tele
     }
+
 }
