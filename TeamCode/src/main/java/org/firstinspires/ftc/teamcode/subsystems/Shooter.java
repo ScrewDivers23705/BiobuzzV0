@@ -30,6 +30,7 @@ public class Shooter {
     private double distance = 0; // distance to the target, used to look up the target RPM and hood position
 
     private double currentVoltage = 12; // current battery voltage, used for feedforward control
+    public boolean manualControl = false; // whether the shooter is in manual control mode
 
     public Shooter(HardwareMap hardwareMap) {
         flywheel = new LazyMotor(hardwareMap, "flywheel"); // initialize the flywheel motor
@@ -45,9 +46,12 @@ public class Shooter {
     public Command periodic() {
         return infinite(() -> {
             // Update the target RPM and hood position based on the distance using the lookup table
-            double[] outputs = lookUpTable.get(distance);
-            targetRPM = outputs[0];
-            targetHoodPosition = outputs[1];
+            if (!manualControl) {
+                double[] outputs = lookUpTable.get(distance);
+                targetRPM = outputs[0];
+                targetHoodPosition = outputs[1];
+
+            }
 
             currentRPM = flywheel.getVelocityRPM();
 
@@ -77,7 +81,7 @@ public class Shooter {
     private void setupLookUpTable() {
         this.lookUpTable = new LookUpTable(2); // 2 outputs: RPM and hood position
         // Add entries to the lookup table (distance in cm, RPM, hood position)
-        //lookUpTable.add(100, 3000, 0.2); // 100cm: 3000 RPM, hood position 0.2 for exmaple
+        lookUpTable.add(100, 3000, 0.2); // 100cm: 3000 RPM, hood position 0.2 for exmaple
         //TODO find acutal points for the lookuptable
     }
 
@@ -95,4 +99,6 @@ public class Shooter {
     public double getDistance() { return distance; }
     public void setCurrentVoltage(double currentVoltage) { this.currentVoltage = currentVoltage; }
     public double getCurrent () { return flywheel.getCurrent(CurrentUnit.AMPS); }
+    public void setManualControl(boolean manualControl) { this.manualControl = manualControl; }
+    public boolean isManualControl() { return manualControl; }
 }

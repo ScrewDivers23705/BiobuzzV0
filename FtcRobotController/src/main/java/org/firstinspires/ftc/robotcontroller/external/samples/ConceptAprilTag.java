@@ -150,6 +150,7 @@ public class ConceptAprilTag extends LinearOpMode {
 
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
+                .setDrawCubeProjection(true)  // Draw a cube projection on the tag to visualize its pose.
 
             // The following default settings are available to un-comment and edit as needed.
             //.setDrawAxes(true) // Changed in V12.0

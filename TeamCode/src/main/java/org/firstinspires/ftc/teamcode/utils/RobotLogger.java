@@ -18,22 +18,22 @@ public class RobotLogger {
         Logger.start();
     }
 
-    public void updateIntake() {
+    private void updateIntake() {
         Logger.recordOutput("Intake/State", robot.intake.isActive() ? "Active" : "Inactive");
         Logger.recordOutput("Intake/LeftSensor/Detected", robot.intake.leftDetected);
         Logger.recordOutput("Intake/RightSensor/Detected", robot.intake.rightDetected);
-        Logger.recordOutput("Intake/Color/R", robot.intake.Red);
-        Logger.recordOutput("Intake/Color/G", robot.intake.Green);
-        Logger.recordOutput("Intake/Color/B", robot.intake.Blue);
+        Logger.recordOutput("Intake/Color/R", robot.intake.red);
+        Logger.recordOutput("Intake/Color/G", robot.intake.green);
+        Logger.recordOutput("Intake/Color/B", robot.intake.blue);
     }
-    public void updateShooter() {
+    private void updateShooter() {
         Logger.recordOutput("Shooter/Active", robot.shooter.isActive());
         Logger.recordOutput("Shooter/TargetRPM", robot.shooter.getTargetRPM());
         Logger.recordOutput("Shooter/CurrentRPM", robot.shooter.getCurrentRPM());
         Logger.recordOutput("Shooter/TargetHoodPosition", robot.shooter.getTargetHoodPosition());
         Logger.recordOutput("Shooter/hoodPosition", robot.shooter.getCurrentHoodPosition());
     }
-    public void updateFollower() {
+    private void updateFollower() {
         Logger.recordOutput("Follower/Pose/x", robot.follower.pose().x());
         Logger.recordOutput("Follower/Pose/y", robot.follower.pose().y());
         Logger.recordOutput("Follower/Pose/heading", robot.follower.pose().heading());
