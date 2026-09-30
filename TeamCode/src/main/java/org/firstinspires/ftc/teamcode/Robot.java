@@ -68,11 +68,10 @@ public class Robot {
      * it also clears the  cache for all lynx hubs for better looptimes. (:
      */
     public void periodic(){
-        for (LynxModule hub : lynxHubs) hub.clearBulkCache(); // clear the bulk cache for all lynx hubs to improve looptimes
         loops++; // increment loops for looptime calculation
 
         follower.update(); // update the follower object to update the robot's pose
-        Scheduler.execute(); // execute the scheduler to run any commands that are scheduled
+        Scheduler.execute(); // execute the scheduler to run any    commands that are scheduled
 
         if (lastLoop == 0) {
             lastLoop = loop.milliseconds();
@@ -98,6 +97,13 @@ public class Robot {
             turret.periodic(), // update the turret object to update the turret's state
             intake.periodic() // update the intake object to update the intake's state
         );
+    }
+
+    /** method to clear the cache for all lynx hubs. */
+    public void clearCache() {
+        for (LynxModule hub : lynxHubs) {
+            hub.clearBulkCache();
+        }
     }
     /** method to get hz from the average loop time. */
     public double getFrequency(){

@@ -8,6 +8,7 @@ public class RobotLogger {
 
     private boolean logIntake = false;
     private boolean logShooter = false;
+    private boolean logTurret = false;
     private boolean logFollower = false;
     private boolean logCurrent = false;
 
@@ -33,6 +34,10 @@ public class RobotLogger {
         Logger.recordOutput("Shooter/TargetHoodPosition", robot.shooter.getTargetHoodPosition());
         Logger.recordOutput("Shooter/hoodPosition", robot.shooter.getCurrentHoodPosition());
     }
+    private void updateTurret() {
+        Logger.recordOutput("Turret/TargetAngle", robot.turret.getTargetAngleDegrees());
+        Logger.recordOutput("Turret/CurrentAngle", robot.turret.getCurrentAngleDegrees());
+    }
     private void updateFollower() {
         Logger.recordOutput("Follower/Pose/x", robot.follower.pose().x());
         Logger.recordOutput("Follower/Pose/y", robot.follower.pose().y());
@@ -50,6 +55,7 @@ public class RobotLogger {
     public void update() {
         if (logIntake) updateIntake();
         if (logShooter) updateShooter();
+        if (logTurret) updateTurret();
         if (logFollower) updateFollower();
         if (logCurrent) updateCurrent();
         updateLoopTime();
@@ -57,6 +63,8 @@ public class RobotLogger {
 
     public void setIntakeLogging(boolean log) { logIntake = log; }
     public void setShooterLogging(boolean log) { logShooter = log; }
+    public void setTurretLogging(boolean log) { logTurret = log; }
     public void setFollowerLogging(boolean log) { logFollower = log; }
     public void setCurrentLogging(boolean log) { logCurrent = log; }
+
 }
