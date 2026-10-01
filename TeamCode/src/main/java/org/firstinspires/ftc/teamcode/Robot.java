@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.utils.Alliance;
+import org.firstinspires.ftc.teamcode.utils.Scorer;
 import org.psilynx.psikit.core.Logger;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class Robot {
     public Intake intake; // make intake public so it can be accessed in opmodes
     public Shooter shooter; // make shooter public so it can be accessed in opmodes
     public Turret turret; // make turret public so it can be accessed in opmodes
+    public Scorer scorer; // make scorer public so it can be accessed in opmodes
     public static Pose endPose = Pose.zero(); // make endPose public so it can be accessed in opmodes and drive initialization
     public Alliance alliance; // make alliance public so it can be accessed in opmodes
     private final Timer loop = new Timer();  // make timer object for looptime calculation
@@ -57,6 +59,8 @@ public class Robot {
         shooter = new Shooter(hardwareMap); // create the shooter object using the hardwareMap passed in from the opmode
         turret = new Turret(hardwareMap); // create the turret object using the hardwareMap passed in from the opmode
 
+        scorer = new Scorer(this); // create the scorer object using the robot
+
         this.voltageSensor = hardwareMap.voltageSensor.iterator().next(); // get the voltage sensor from the hardware map
         this.voltage = voltageSensor.getVoltage(); // get the current voltage of the robot
         shooter.setCurrentVoltage(voltage);
@@ -71,7 +75,9 @@ public class Robot {
         loops++; // increment loops for looptime calculation
 
         follower.update(); // update the follower object to update the robot's pose
-        Scheduler.execute(); // execute the scheduler to run any    commands that are scheduled
+        scorer.periodic(alliance); // update the scorer object to update the robot's scoring state
+
+        Scheduler.execute(); // execute the scheduler to run any commands that are scheduled
 
         if (lastLoop == 0) {
             lastLoop = loop.milliseconds();

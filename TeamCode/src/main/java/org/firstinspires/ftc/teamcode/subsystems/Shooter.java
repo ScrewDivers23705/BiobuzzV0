@@ -50,7 +50,6 @@ public class Shooter {
                 double[] outputs = lookUpTable.get(distance);
                 targetRPM = outputs[0];
                 targetHoodPosition = outputs[1];
-
             }
 
             currentRPM = flywheel.getVelocityRPM();
