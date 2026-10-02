@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.OpModes.teleop;
 import com.pedropathing.follower.ManualDrive;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.OpModes.CommandOpMode;
+import org.psilynx.psikit.ftc.autolog.PsiKitAutoLog;
 
+@PsiKitAutoLog
 @TeleOp(name = "Test Teleop", group = "Test")
 public class TestTeleop extends CommandOpMode {
 

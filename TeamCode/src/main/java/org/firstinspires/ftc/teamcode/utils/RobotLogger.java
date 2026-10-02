@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.utils;
 
 import org.firstinspires.ftc.teamcode.Robot;
 import org.psilynx.psikit.core.Logger;
+import org.psilynx.psikit.ftc.PedroFollowerOdometryLogger;
 
 public class RobotLogger {
     private final Robot robot;
@@ -14,9 +15,6 @@ public class RobotLogger {
 
     public RobotLogger(Robot robot) {
         this.robot = robot;
-
-        Logger.recordMetadata("Alliance", robot.alliance.toString());
-        Logger.start();
     }
 
     private void updateIntake() {
@@ -44,6 +42,7 @@ public class RobotLogger {
         Logger.recordOutput("Follower/Pose/x", robot.follower.pose().x());
         Logger.recordOutput("Follower/Pose/y", robot.follower.pose().y());
         Logger.recordOutput("Follower/Pose/heading", robot.follower.pose().heading());
+        PedroFollowerOdometryLogger.log("follower", robot.follower.pose().x(), robot.follower.pose().y(), robot.follower.pose().heading());
     }
     private void updateCurrent() {
         Logger.recordOutput("Current/Voltage", robot.voltage);
@@ -55,6 +54,8 @@ public class RobotLogger {
     }
 
     public void update() {
+        Logger.recordOutput("Alliance", robot.alliance.toString());
+
         if (logIntake) updateIntake();
         if (logShooter) updateShooter();
         if (logTurret) updateTurret();

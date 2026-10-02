@@ -8,8 +8,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.utils.Alliance;
 import org.firstinspires.ftc.teamcode.utils.RobotLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class CommandOpMode extends OpMode {
+    private static final Logger log = LoggerFactory.getLogger(CommandOpMode.class);
     protected Robot robot;
     protected RobotLogger logger;
     private static Alliance alliance = Alliance.BLUE;
@@ -36,6 +39,7 @@ public abstract class CommandOpMode extends OpMode {
         logger.setIntakeLogging(true);
         logger.setShooterLogging(true);
         logger.setTurretLogging(true);
+        logger.setFollowerLogging(true);
     }
 
     @Override
