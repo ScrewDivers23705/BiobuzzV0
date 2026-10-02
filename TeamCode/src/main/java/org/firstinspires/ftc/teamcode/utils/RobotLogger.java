@@ -37,6 +37,8 @@ public class RobotLogger {
     private void updateTurret() {
         Logger.recordOutput("Turret/TargetAngle", robot.turret.getTargetAngleDegrees());
         Logger.recordOutput("Turret/CurrentAngle", robot.turret.getCurrentAngleDegrees());
+        Logger.recordOutput("Turret/EstimatedAngle", robot.turret.getEstimatedAngle());
+        Logger.recordOutput("Turret/Ready", robot.turret.isReady());
     }
     private void updateFollower() {
         Logger.recordOutput("Follower/Pose/x", robot.follower.pose().x());

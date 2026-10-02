@@ -19,6 +19,12 @@ public class Turret {
 
     private double targetAngleDegrees = 0; // current target angle for the turret
 
+    //================ for turret ready verification ===================
+    public static double maxSpeedDegSec = 250; // maximum speed of the turret in degrees per second //todo check on actual hardware
+    public static double readyThresholdDeg = 2; // threshold in degrees to consider the turret ready
+    private double estimatedAngle = 0; // estimated angle of the turrret based on calculatiosn
+    private long lastTime = 0; // last time the turret angle was updated
+
     public Turret(HardwareMap hardwareMap) {
         leftServo = new LazyServo(hardwareMap, "turret_left", minAngleDegrees, maxAngleDegrees);
         rightServo = new LazyServo(hardwareMap, "turret_right", minAngleDegrees, maxAngleDegrees);
@@ -26,8 +32,8 @@ public class Turret {
         rightServo.setThreshold(0.0015); // set threshold to 0.5 degrees instead of the default 1.8 degrees
 
         setTargetAngleDegrees(0); // initialize the turret to the center position
-        leftServo.setPosition(targetAngleDegrees);
-        rightServo.setPosition(targetAngleDegrees);
+        leftServo.setAngle(targetAngleDegrees);
+        rightServo.setAngle(targetAngleDegrees);
     }
 
     public void setTargetAngleDegrees(double targetAngleDegrees) {
@@ -38,7 +44,13 @@ public class Turret {
         return targetAngleDegrees;
     }
     public double getCurrentAngleDegrees() {
-        return leftServo.getPosition();
+        return leftServo.getAngle();
+    }
+    public boolean isReady() {
+        return Math.abs(estimatedAngle - getTargetAngleDegrees()) < readyThresholdDeg;
+    }
+    public double getEstimatedAngle() {
+        return estimatedAngle;
     }
     // ================ Commands ===================
     public Command setTargetAngleDegreesCommand(double targetAngleDegrees) {
@@ -48,6 +60,14 @@ public class Turret {
         return infinite(() -> {
             leftServo.setAngle(targetAngleDegrees);
             rightServo.setAngle(targetAngleDegrees);
+
+            // Update the estimated angle based on the target angle and the maximum speed of the turret
+            long now = System.nanoTime();
+            double dt = (lastTime == 0) ? 0 : (now - lastTime) / 1e9;
+            double maxDeltaAngle = maxSpeedDegSec * dt;
+            double angleError = targetAngleDegrees - estimatedAngle;
+            estimatedAngle += Math.max(-maxDeltaAngle, Math.min(maxDeltaAngle, angleError));
+            lastTime = now;
         })
         .requiring(leftServo, rightServo)
         .setInterruptedBehavior(InterruptedBehavior.SUSPEND);

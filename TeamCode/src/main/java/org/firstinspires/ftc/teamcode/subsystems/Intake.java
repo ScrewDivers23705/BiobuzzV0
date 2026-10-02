@@ -149,4 +149,11 @@ public class Intake {
     public double getCurrent() {
         return intakeMotor.getCurrent(CurrentUnit.AMPS);
     }
+    public Command feedCommand() { // feed command for the shooteing sequence
+        return Command.build()
+                .requiring(intakeMotor)
+                .setStart(this::intake)
+                .setDone(() -> false)
+                .setEnd(c -> stop());
+    }
 }

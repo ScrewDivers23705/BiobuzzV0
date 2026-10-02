@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.utils.LazyServo;
 import org.firstinspires.ftc.teamcode.utils.math.LookUpTable;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
+import static com.pedropathing.ivy.commands.Commands.instant;
 
 @Configurable
 public class Shooter {
@@ -84,9 +85,12 @@ public class Shooter {
         //TODO find acutal points for the lookuptable
     }
 
+    public Command spinUpCommand() { return instant(() -> setActive(true)); }
+    public Command spinDownCommand() { return instant(() -> setActive(false)); }
+
     // Getters and setters for the shooter state variables
     public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    private void setActive(boolean active) { this.active = active; }
     public double getTargetRPM() { return targetRPM; }
     public void setTargetRPM(double targetRPM) { this.targetRPM = targetRPM; }
     public double getCurrentRPM() { return currentRPM; }
