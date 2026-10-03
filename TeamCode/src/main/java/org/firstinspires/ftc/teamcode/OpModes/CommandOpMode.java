@@ -39,6 +39,7 @@ public abstract class CommandOpMode extends OpMode {
         logger.setIntakeLogging(true);
         logger.setShooterLogging(true);
         logger.setTurretLogging(true);
+        logger.setScorerLogging(true);
         logger.setFollowerLogging(true);
     }
 

@@ -21,6 +21,9 @@ public class Scorer {
     private final static Vector BLUE_AUDIENCE_HIVE_POSITION = new Vector(83, 55);
     private final static Vector BLUE_OPPOSITE_HIVE_POSITION = new Vector(83, 83);
     private Vector currentHivePosition = RED_AUDIENCE_HIVE_POSITION;
+    private double distanceCm = 0.0;
+    private double turretDeg = 0.0;
+    private Vector virtualPos = new Vector(0,0);
     // ========================== Commands ==========================
     private Command shoot;
     public Scorer(Robot robot) {
@@ -54,6 +57,11 @@ public class Scorer {
 
         robot.shooter.setDistance(distanceToHive);
         robot.turret.setTargetAngleDegrees(normalizedTurretAngle);
+
+        // update class variables for telemetry
+        distanceCm = distanceToHive;
+        turretDeg = normalizedTurretAngle;
+        virtualPos = virtualRobotPosition;
     }
 
     /** Normalizes an anglee in degrees in the range [-180, 180].
@@ -88,5 +96,15 @@ public class Scorer {
         }
         return shoot;
     }
+
+    public boolean isReady() {
+        return ready();
+    }
+
+    public double getDistanceCm() { return distanceCm; }
+    public double getTurretAngleDeg() { return turretDeg; }
+    public Vector getVirtualPosition() { return virtualPos; }
+    public Vector getHivePosition() { return currentHivePosition; }
+
 
 }

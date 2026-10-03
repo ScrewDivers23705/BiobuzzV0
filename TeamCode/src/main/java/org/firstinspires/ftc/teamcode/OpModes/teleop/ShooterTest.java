@@ -15,6 +15,7 @@ public class ShooterTest extends OpMode {
 
     public void init() {
         shooter = new Shooter(hardwareMap);
+        Scheduler.reset();
     }
     public void start() {
         shooter.setManualControl(true);

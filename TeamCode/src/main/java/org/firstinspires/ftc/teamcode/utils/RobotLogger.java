@@ -10,6 +10,7 @@ public class RobotLogger {
     private boolean logIntake = false;
     private boolean logShooter = false;
     private boolean logTurret = false;
+    private boolean logScorer = false;
     private boolean logFollower = false;
     private boolean logCurrent = false;
 
@@ -38,6 +39,14 @@ public class RobotLogger {
         Logger.recordOutput("Turret/EstimatedAngle", robot.turret.getEstimatedAngle());
         Logger.recordOutput("Turret/Ready", robot.turret.isReady());
     }
+    private void updateScorer() {
+        Logger.recordOutput("Scorer/DistanceToHive", robot.scorer.getDistanceCm());
+        Logger.recordOutput("Scorer/TurretAngle", robot.scorer.getTurretAngleDeg());
+        Logger.recordOutput("Scorer/VirtualRobotPosition/x", robot.scorer.getVirtualPosition().elements[0]);
+        Logger.recordOutput("Scorer/VirtualRobotPosition/y", robot.scorer.getVirtualPosition().elements[1]);
+        Logger.recordOutput("Scorer/HivePosition/x", robot.scorer.getHivePosition().elements[0]);
+        Logger.recordOutput("Scorer/HivePosition/y", robot.scorer.getHivePosition().elements[1]);
+    }
     private void updateFollower() {
         Logger.recordOutput("Follower/Pose/x", robot.follower.pose().x());
         Logger.recordOutput("Follower/Pose/y", robot.follower.pose().y());
@@ -59,6 +68,7 @@ public class RobotLogger {
         if (logIntake) updateIntake();
         if (logShooter) updateShooter();
         if (logTurret) updateTurret();
+        if (logScorer) updateScorer();
         if (logFollower) updateFollower();
         if (logCurrent) updateCurrent();
         updateLoopTime();
@@ -67,6 +77,7 @@ public class RobotLogger {
     public void setIntakeLogging(boolean log) { logIntake = log; }
     public void setShooterLogging(boolean log) { logShooter = log; }
     public void setTurretLogging(boolean log) { logTurret = log; }
+    public void setScorerLogging(boolean log) { logScorer = log; }
     public void setFollowerLogging(boolean log) { logFollower = log; }
     public void setCurrentLogging(boolean log) { logCurrent = log; }
 
