@@ -53,6 +53,7 @@ public abstract class CommandOpMode extends OpMode {
 
         telemetry.addLine("Select Alliance, press dpad left for blue, dpad right for red.");
         telemetry.addData("alliance: ", robot.alliance);
+        telemetry.addData("robot pose: ", robot.follower.pose().toString());
         telemetry.update();
     }
 

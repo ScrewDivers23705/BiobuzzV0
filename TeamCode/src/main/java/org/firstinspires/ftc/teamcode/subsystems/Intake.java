@@ -22,6 +22,7 @@ import static com.pedropathing.ivy.groups.Groups.parallel;
 @Configurable
 public class Intake {
 
+
     /** Hardware components */
     private final LazyMotor intakeMotor;
     private final LazyServo rampServo;

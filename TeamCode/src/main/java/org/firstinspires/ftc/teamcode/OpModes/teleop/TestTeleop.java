@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.teleop;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.ManualDrive;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.OpModes.CommandOpMode;
@@ -8,6 +9,12 @@ import org.psilynx.psikit.ftc.autolog.PsiKitAutoLog;
 @PsiKitAutoLog
 @TeleOp(name = "Test Teleop", group = "Test")
 public class TestTeleop extends CommandOpMode {
+
+    @Override
+    public void init() {
+        super.init();
+        robot.follower.setPose(robot.endPose); // set the robot's pose to the end pose from autonomous
+    }
 
     @Override
     public void loop() {
