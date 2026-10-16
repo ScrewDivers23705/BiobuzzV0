@@ -26,10 +26,20 @@ public class visionTest extends OpMode {
             telemetry.addData("Percent cluster: ", vision.getTarget().percentClusterFound);
             telemetry.addData("distance: ", vision.getTarget().rangeCm);
             telemetry.addData("roll deg:", vision.getTarget().rollDeg);
-            telemetry.addData("Camerastate", vision.getCameraState());
-
-            telemetry.update();
+            telemetry.addLine("ftc pose:");
+            telemetry.addData(" cluster ftcpose X: ", vision.getTarget().clusterDetection.ftcPose.x);
+            telemetry.addData(" cluster ftcpose Y: ", vision.getTarget().clusterDetection.ftcPose.y);
+            telemetry.addData(" cluster ftcpose Z: ", vision.getTarget().clusterDetection.ftcPose.z);
+            telemetry.addLine("robot pose:");
+            telemetry.addData(" robot ftcpose X: ", vision.getTarget().clusterDetection.robotPose.getPosition().x);
+            telemetry.addData(" robot ftcpose Y: ", vision.getTarget().clusterDetection.robotPose.getPosition().y);
+            telemetry.addData(" robot ftcpose Z: ", vision.getTarget().clusterDetection.robotPose.getPosition().z);
         }
+        else {
+            telemetry.addData("Camerastate", vision.getCameraState());
+            telemetry.addLine("No target found");
+        }
+        telemetry.update();
     }
 
 }

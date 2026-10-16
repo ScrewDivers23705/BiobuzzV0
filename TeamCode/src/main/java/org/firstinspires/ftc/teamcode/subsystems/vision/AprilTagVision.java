@@ -28,14 +28,16 @@ public class AprilTagVision {
         public final String name;
         public final double rangeCm, bearingDeg, elevationDeg, rollDeg;
         public final int percentClusterFound;
+        public final AprilTagClusterDetection clusterDetection;
 
-        Target(String name, double rangeCm, double bearingDeg, double elevationDeg, double rollDeg, int percentClusterFound) {
+        Target(String name, double rangeCm, double bearingDeg, double elevationDeg, double rollDeg, int percentClusterFound, AprilTagClusterDetection clusterDetection) {
             this.name = name;
             this.rangeCm = rangeCm;
             this.bearingDeg = bearingDeg;
             this.elevationDeg = elevationDeg;
             this.rollDeg = rollDeg;
             this.percentClusterFound = percentClusterFound;
+            this.clusterDetection = clusterDetection;
         }
     }
 
@@ -113,7 +115,7 @@ public class AprilTagVision {
             if (clusterDetection.percentClusterFound < minPercentClusterFound) continue; // ignore tags that aren't mostly visible
 
             Target target = new Target(name, clusterDetection.ftcPose.range, clusterDetection.ftcPose.bearing,
-                    clusterDetection.ftcPose.elevation, clusterDetection.ftcPose.roll, clusterDetection.percentClusterFound);
+                    clusterDetection.ftcPose.elevation, clusterDetection.ftcPose.roll, clusterDetection.percentClusterFound, clusterDetection);
             if (best == null || target.percentClusterFound > best.percentClusterFound || (target.percentClusterFound == best.percentClusterFound && target.rangeCm < best.rangeCm)) {
                 best = target;
             }
