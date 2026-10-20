@@ -111,7 +111,7 @@ public class AprilTagVision {
             AprilTagClusterDetection clusterDetection = (AprilTagClusterDetection) detection;
             String name = clusterDetection.metadata.name;
             if (name == null || name.isEmpty() || Character.toUpperCase(name.charAt(0)) != allianceChar) continue; // ignore tags that aren't for our alliance
-            if (Math.abs(clusterDetection.ftcPose.roll) >= 90) continue; // ignore tags that aren't looking up
+            if (Math.abs(clusterDetection.ftcPose.y) >= 90) continue; // ignore tags that aren't looking up
             if (clusterDetection.percentClusterFound < minPercentClusterFound) continue; // ignore tags that aren't mostly visible
 
             Target target = new Target(name, clusterDetection.ftcPose.range, clusterDetection.ftcPose.bearing,
