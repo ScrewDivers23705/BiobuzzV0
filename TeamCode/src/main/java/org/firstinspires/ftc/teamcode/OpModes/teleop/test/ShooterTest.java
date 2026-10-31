@@ -34,6 +34,7 @@ public class ShooterTest extends OpMode {
         }
 
         telemetry.addData("RPM", shooter.getCurrentRPM());
+        telemetry.addData("target RPM", shooter.getTargetRPM());
         telemetry.update();
     }
 

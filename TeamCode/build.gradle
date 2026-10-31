@@ -24,6 +24,9 @@ buildscript {
         maven {
             url "https://repo.dairy.foundation/releases"
         }
+        maven {
+            url "https://mymaven.bylazar.com/releases"
+        }
     }
     dependencies {
         classpath "dev.frozenmilk:Load:0.3.2"
@@ -42,7 +45,7 @@ dependencies {
     implementation project(':FtcRobotController')
     implementation 'org.psilynx.psikit:core:0.2.0'
     implementation 'org.psilynx.psikit:ftc:0.2.0'
-    implementation("com.bylazar.sloth:fullpanels:0.3.2+1.0.13")
+    implementation 'com.bylazar.sloth:fullpanels:0.3.2+1.0.13'
 
 }
 

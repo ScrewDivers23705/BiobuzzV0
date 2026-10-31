@@ -40,6 +40,9 @@ public class DriveTest extends OpMode {
         }
         loops++;
         telemetry.addData("looptime (ms): ", loopTime);
+        telemetry.addData("Forward: ", gamepad1.left_stick_y);
+        telemetry.addData("strafe: ", gamepad1.left_stick_x);
+        telemetry.addData("rotate: ", gamepad1.right_stick_x);
         telemetry.update();
 
     }
