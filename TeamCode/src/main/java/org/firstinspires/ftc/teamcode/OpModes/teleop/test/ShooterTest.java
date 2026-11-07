@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.OpModes.teleop.test;
 
-import com.bylazar.configurables.annotations.Configurable;
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
-@Configurable
+@Config
 @TeleOp(name = "Shooter Test", group = "test")
 public class ShooterTest extends OpMode {
     private Shooter shooter;

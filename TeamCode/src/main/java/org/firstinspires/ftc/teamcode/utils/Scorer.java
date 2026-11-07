@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import com.bylazar.configurables.annotations.Configurable;
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.math.Pose;
 import com.pedropathing.math.Vector;
@@ -11,7 +11,7 @@ import static com.pedropathing.ivy.commands.Commands.waitUntil;
 import static com.pedropathing.ivy.groups.Groups.loop;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 
-@Configurable
+@Config
 public class Scorer {
     private final Robot robot;
 

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.teleop.test;
 
-import com.bylazar.configurables.annotations.Configurable;
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 import java.util.List;
 
-@Configurable
+@Config
 @TeleOp(name = "Turret Test", group = "test")
 public class turretTest extends OpMode {
     private Turret turret;

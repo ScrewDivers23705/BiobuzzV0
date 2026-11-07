@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.bylazar.configurables.annotations.Configurable;
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.behaviors.InterruptedBehavior;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.utils.LazyServo;
 import static com.pedropathing.ivy.commands.Commands.infinite;
 import static com.pedropathing.ivy.commands.Commands.instant;
 
-@Configurable
+@Config
 public class Turret {
     private final LazyServo leftServo;
     private final LazyServo rightServo;

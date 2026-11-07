@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.bylazar.configurables.annotations.Configurable;
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.behaviors.InterruptedBehavior;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
@@ -19,7 +19,7 @@ import static com.pedropathing.ivy.groups.Groups.parallel;
  * Intake subsystem for the robot.
  * This class manages the intake motor and color sensors.
  */
-@Configurable
+@Config
 public class Intake {
 
 

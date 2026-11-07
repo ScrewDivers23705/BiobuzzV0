@@ -1,18 +1,16 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-import com.bylazar.telemetry.JoinedTelemetry;
-import com.bylazar.telemetry.PanelsTelemetry;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import gay.zharel.fateweaver.flight.FateFtcTelemetry;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.utils.Alliance;
 import org.firstinspires.ftc.teamcode.utils.RobotLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class CommandOpMode extends OpMode {
-    private static final Logger log = LoggerFactory.getLogger(CommandOpMode.class);
     protected Robot robot;
     protected RobotLogger logger;
     private static Alliance alliance = Alliance.BLUE;
@@ -31,9 +29,10 @@ public abstract class CommandOpMode extends OpMode {
 
         robot = new Robot(hardwareMap, alliance);
         logger = new RobotLogger(robot);
-        telemetry = new JoinedTelemetry(
+        telemetry = new MultipleTelemetry(
                 super.telemetry,
-                PanelsTelemetry.INSTANCE.getFtcTelemetry()
+                FtcDashboard.getInstance().getTelemetry(),
+                FateFtcTelemetry.INSTANCE
         );
 
         logger.setIntakeLogging(true);

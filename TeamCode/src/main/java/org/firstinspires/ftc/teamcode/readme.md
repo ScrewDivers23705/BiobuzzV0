@@ -9,8 +9,8 @@ Robot code for **Screw Divers** V0 robot, for the **Biobuzz** FTC season.
 * **FTC SDK**, for main robot control.
 * **Pedro Pathing**, for localization and path following.
 * **Ivy**, for command scheduling and requirements and cleaner autos.
-* **Panels**, for live telemetry and tuning from a browser for PIDs and stuff.
-* **PsiKit**, for AdvantageKit-style logging and match reviewing.
+* **FTC Dashboard (Slothboard build)**, for live telemetry and tuning from a browser.
+* **FateWeaver**, for flight recording and match review.
 
 ---
 
@@ -35,7 +35,7 @@ teamcode/
 │   ├── Alliance.java
 │   ├── LazyMotor.java         Motor wrapper, writes only on change, cached current/velocity for looptimes
 │   ├── LazyServo.java         Servo wrapper, writes only on change, cached position for looptimes
-│   ├── RobotLogger.java       PsiKit logging for each subsystem
+│   ├── RobotLogger.java       FateWeaver logging for each subsystem
 │   └── math/
 │       ├── LookUpTable.java   LookUpTable code by demacia ❤️, used for shooter distance -> RPM/hood pos
 │       ├── SOTM.java          calculations for SOTM
@@ -54,15 +54,16 @@ teamcode/
 - **OpModes only schedule and cancel commands.** Subsystems expose `Command`-returning methods such as `intakeCommand()`, `stopCommand()`, `spinUpCommand()` and `shootCommand()`. Their actual methods are private so everything stays clean and nice.
 - **Every subsystem has a `periodic()` command.** It is `infinite`, `.requiring(...)` its hardware, and uses `InterruptedBehavior.SUSPEND`. Ivy's default is `END`, so without `SUSPEND` the control loop would die the first time a manual command interrupted it. These are scheduled once in `Robot.start()`.
 - **Lazy hardware wrappers.** `LazyMotor` and `LazyServo` skip writes that would not change anything noticeably, which keeps hub traffic and loop times down.
-- **Everything that needs tuning should be `public static` and `@Configurable`**, so it can be changed live from Panels.
+- **Everything that needs tuning should be `public static` and `@Config`**, so it can be changed live from FTC Dashboard.
 
 ---
 
 ## Logging and telemetry
 
-- **Logging uses PsiKit.** Add `@PsiKitAutoLog` to the start of each OpMode and use `logger.set{subsystem}Logging(true)` for the subsystems you want to log.
-- **Log files** are written on the Robot Controller under `/sdcard/FIRST/PsiKit/`.
-- **Panels** shows telemetry and exposes every `@Configurable` value for live tuning.
+- **Logging uses FateWeaver.** Call `Fate.log(key, value)` for values to record; `RobotLogger` collects the selected subsystem data each loop.
+- **Log files** can be viewed and downloaded from the robot's FateWeaver page at `/fate` (for example, `http://192.168.43.1:8080/fate` on a Control Hub).
+- **FTC Dashboard** receives driver station and browser telemetry through `MultipleTelemetry` and exposes `@Config` fields for live tuning.
+- **FTC Dashboard** is available at `/dash` on the robot (for example, `http://192.168.43.1:8080/dash` on a Control Hub).
 
 ---
 

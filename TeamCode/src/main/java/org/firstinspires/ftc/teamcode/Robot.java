@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Turret;
 import org.firstinspires.ftc.teamcode.utils.Alliance;
 import org.firstinspires.ftc.teamcode.utils.Scorer;
-import org.psilynx.psikit.core.Logger;
+import gay.zharel.fateweaver.telemetry.Fate;
 
 import java.util.List;
 import java.util.Map;
@@ -124,17 +124,18 @@ public class Robot {
     private void logMap(String prefix, Map<String, Object> map) {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             if (entry.getValue() instanceof Double) {
-                Logger.recordOutput(prefix + "/" + entry.getKey(), (Double) entry.getValue());
+                Fate.log(prefix + "/" + entry.getKey(), entry.getValue());
             }
             else if (entry.getValue() instanceof Integer) {
-                Logger.recordOutput(prefix + "/" + entry.getKey(), (Integer) entry.getValue());
+                Fate.log(prefix + "/" + entry.getKey(), entry.getValue());
             }
             else if (entry.getValue() instanceof Boolean) {
-                Logger.recordOutput(prefix + "/" + entry.getKey(), (Boolean) entry.getValue());
+                Fate.log(prefix + "/" + entry.getKey(), entry.getValue());
             }
             else if (entry.getValue() != null){
-                Logger.recordOutput(prefix + "/" + entry.getKey(), entry.getValue().toString());
+                Fate.log(prefix + "/" + entry.getKey(), entry.getValue().toString());
             }
         }
     }
+
 }
