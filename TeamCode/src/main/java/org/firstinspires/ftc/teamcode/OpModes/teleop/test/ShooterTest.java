@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode.OpModes.teleop.test;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import gay.zharel.fateweaver.flight.FateFtcTelemetry;
+import gay.zharel.fateweaver.telemetry.Fate;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @Config
@@ -15,6 +19,13 @@ public class ShooterTest extends OpMode {
 
     public void init() {
         shooter = new Shooter(hardwareMap);
+
+        telemetry = new MultipleTelemetry(
+                super.telemetry,
+                FtcDashboard.getInstance().getTelemetry(),
+                FateFtcTelemetry.INSTANCE
+        );
+
         Scheduler.reset();
     }
     public void start() {
@@ -33,8 +44,18 @@ public class ShooterTest extends OpMode {
             shooter.setTargetHoodPosition(hoodPosition);
         }
 
-        telemetry.addData("RPM", shooter.getCurrentRPM());
-        telemetry.addData("target RPM", shooter.getTargetRPM());
+        telemetry.addData("RPM: ", shooter.getCurrentRPM());
+        telemetry.addData("target RPM: ", shooter.getTargetRPM());
+        telemetry.addData("hood position: ", shooter.getTargetHoodPosition());
+        telemetry.addData("Current (Amps): ", shooter.getCurrent());
+        telemetry.addData("Current Voltage (V): ", shooter.getCurrentVoltage());
+
+        Fate.log("RPM", shooter.getCurrentRPM());
+        Fate.log("target RPM", shooter.getTargetRPM());
+        Fate.log("hood position", shooter.getTargetHoodPosition());
+        Fate.log("Current (Amps)", shooter.getCurrent());
+        Fate.log("Current Voltage (V)", shooter.getCurrentVoltage());
+
         telemetry.update();
     }
 
